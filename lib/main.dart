@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 
 void main() => runApp(BytebankApp());
@@ -7,9 +9,20 @@ class BytebankApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        body: FormularioTransferencia(),
+        body: ListaTransferencia(),
       ),
     );
+  }
+}
+
+class Transaction {
+  final double price;
+  final String name;
+
+  Transaction({this.price, this.name});
+
+  toString() {
+    debugPrint('Transaction{price: $price, name: $name}');
   }
 }
 
@@ -17,9 +30,16 @@ class FormularioTransferencia extends StatelessWidget {
   final TextEditingController _controllerName = TextEditingController();
   final TextEditingController _controllerPrice = TextEditingController();
 
-  createTransaction() {
+  createTransaction(context) {
     final String name = _controllerName.text;
-    final String price = _controllerPrice.text;
+    final double price = double.tryParse(_controllerPrice.text);
+
+    final Transaction transaction = Transaction(
+      name: name,
+      price: price,
+    );
+
+    Navigator.pop(context, transaction);
   }
 
   @override
@@ -46,7 +66,7 @@ class FormularioTransferencia extends StatelessWidget {
             ),
             RaisedButton(
               child: Text('Transferir'),
-              onPressed: () => createTransaction(),
+              onPressed: () => createTransaction(context),
             ),
           ])),
     );
@@ -94,6 +114,18 @@ class ListaTransferencia extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
+        onPressed: () {
+          final Future<Transaction> future = Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) {
+              return FormularioTransferencia();
+            }),
+          );
+
+          future.then((transactionReceived) {
+            debugPrint(transactionReceived.toString());
+          });
+        },
       ),
       body: Column(
         children: <Widget>[
