@@ -17,10 +17,37 @@ class FormularioTransferencia extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Criando Transferência'),
-        ),
-        body: Text('Teste'));
+      appBar: AppBar(
+        title: Text('Criando Transferência'),
+      ),
+      body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(children: <Widget>[
+            TextField(
+              style: TextStyle(
+                fontSize: 20,
+              ),
+              decoration: InputDecoration(
+                labelText: 'Pra quem deseja transferir ?',
+                hintText: 'Ex. Mateus Henrique',
+              ),
+              keyboardType: TextInputType.number,
+            ),
+            TextField(
+              style: TextStyle(
+                fontSize: 20,
+              ),
+              decoration: InputDecoration(
+                  labelText: 'Quanto deseja transferir ?',
+                  hintText: 'R\$ 10.00',
+                  icon: Icon(Icons.monetization_on)),
+              keyboardType: TextInputType.number,
+            ),
+            RaisedButton(
+              child: Text('Transferir'),
+            ),
+          ])),
+    );
   }
 }
 
