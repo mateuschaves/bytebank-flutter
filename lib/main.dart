@@ -14,6 +14,14 @@ class BytebankApp extends StatelessWidget {
 }
 
 class FormularioTransferencia extends StatelessWidget {
+  final TextEditingController _controllerName = TextEditingController();
+  final TextEditingController _controllerPrice = TextEditingController();
+
+  createTransaction() {
+    final String name = _controllerName.text;
+    final String price = _controllerPrice.text;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,30 +31,56 @@ class FormularioTransferencia extends StatelessWidget {
       body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(children: <Widget>[
-            TextField(
-              style: TextStyle(
-                fontSize: 20,
-              ),
-              decoration: InputDecoration(
-                labelText: 'Pra quem deseja transferir ?',
-                hintText: 'Ex. Mateus Henrique',
-              ),
-              keyboardType: TextInputType.number,
+            Editor(
+              controller: _controllerName,
+              hint: 'Ex. Mateus Henrique',
+              label: 'Pra quem deseja transferir ?',
+              keyboardType: TextInputType.name,
             ),
-            TextField(
-              style: TextStyle(
-                fontSize: 20,
-              ),
-              decoration: InputDecoration(
-                  labelText: 'Quanto deseja transferir ?',
-                  hintText: 'R\$ 10.00',
-                  icon: Icon(Icons.monetization_on)),
+            Editor(
+              controller: _controllerPrice,
+              hint: 'Ex. R\$ 100,00',
+              label: 'Quanto deseja transferir ?',
               keyboardType: TextInputType.number,
+              icon: Icon(Icons.monetization_on),
             ),
             RaisedButton(
               child: Text('Transferir'),
+              onPressed: () => createTransaction(),
             ),
           ])),
+    );
+  }
+}
+
+class Editor extends StatelessWidget {
+  final TextEditingController controller;
+  final String label;
+  final String hint;
+  final Icon icon;
+  final TextInputType keyboardType;
+
+  Editor({
+    this.controller,
+    this.hint,
+    this.label,
+    this.icon,
+    this.keyboardType,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: controller,
+      style: TextStyle(
+        fontSize: 20,
+      ),
+      decoration: InputDecoration(
+        labelText: label,
+        hintText: hint,
+        icon: icon,
+      ),
+      keyboardType: keyboardType,
     );
   }
 }
@@ -88,7 +122,6 @@ class ItemTransferencia extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Card(
       child: ListTile(
           leading: Icon(Icons.monetization_on),
